@@ -13,7 +13,6 @@ for module_name in ALL_MODULES:
 async def main():
     await BOT.start()
     await BOT.idle()
-    await BOT.stop()
 
 
 if len(sys.argv) not in (1, 3, 4):
