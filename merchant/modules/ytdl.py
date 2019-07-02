@@ -401,13 +401,24 @@ async def message_handler(bot: BOT, message: Message):
                         disable_notification=True,
                         reply_to_message_id=ReplyCheck(message)
                     )
+                try:
+                    db.set(key, o.video.file_id)
 
-                db.set(key, o.video.file_id)
+                    await BOT.send_video(
+                        chat_id=-1001496485217,
+                        video=o.video.file_id,
+                        caption=link,
+                        disable_notification=True
+                    )
+                except AttributeError as e:
+                    LOGS.warn(e)
+                    db.set(key, o.animation.file_id)
+
+                    await BOT.send_animation(
+                        chat_id=-1001496485217,
+                        animation=o.animation.file_id,
+                        caption=link,
+                        disable_notification=True
+                    )
+
                 clean_cache(file_location, thumbnail)
-
-                await BOT.send_video(
-                    chat_id=-1001496485217,
-                    video=o.video.file_id,
-                    caption=link,
-                    disable_notification=True
-                )
