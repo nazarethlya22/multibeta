@@ -1,7 +1,7 @@
 import youtube_dl
 import asyncio
 from pyrogram import Filters, Message
-from merchant import BOT, db, executor
+from merchant import BOT, db, executor, LOGS
 from merchant.helpers import ReplyCheck
 from urllib.parse import urlsplit
 
@@ -226,11 +226,14 @@ def get_audio(url, data=None):
         return filename2
 
 
-def clean_cache(location, thumbnail):
-    if os.path.exists(location):
-        os.remove(location)
-    if os.path.exists(thumbnail):
-        os.remove(thumbnail)
+def clean_cache(location: str, thumbnail: str):
+    try:
+        if os.path.exists(location):
+            os.remove(location)
+        if os.path.exists(thumbnail):
+            os.remove(thumbnail)
+    except TypeError as e:
+        LOGS.warning(e)
 
 
 @BOT.on_message(Filters.regex(r'(?P<url>https?://[^\s]+)'))
