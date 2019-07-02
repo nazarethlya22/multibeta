@@ -345,16 +345,26 @@ async def message_handler(bot: BOT, message: Message):
                     action='upload_audio'
                 )
 
-                o = await BOT.send_audio(
-                    chat_id=message.chat.id,
-                    audio=file_location,
-                    performer=metadata['creator'],
-                    duration=metadata['duration'],
-                    title=tiitel,
-                    thumb=thumbnail,
-                    disable_notification=True,
-                    reply_to_message_id=ReplyCheck(message)
-                )
+                try:
+                    o = await BOT.send_audio(
+                        chat_id=message.chat.id,
+                        audio=file_location,
+                        performer=metadata['creator'],
+                        duration=metadata['duration'],
+                        title=tiitel,
+                        thumb=thumbnail,
+                        disable_notification=True,
+                        reply_to_message_id=ReplyCheck(message)
+                    )
+
+                except KeyError as e:
+                    LOGS.warn(e)
+                    o = await BOT.send_audio(
+                        chat_id=message.chat.id,
+                        audio=file_location,
+                        disable_notification=True,
+                        reply_to_message_id=ReplyCheck(message)
+                    )
 
                 db.set(key, o.audio.file_id)
                 clean_cache(file_location, thumbnail)
@@ -372,14 +382,25 @@ async def message_handler(bot: BOT, message: Message):
                     action='upload_video'
                 )
 
-                o = await BOT.send_video(
-                    chat_id=message.chat.id,
-                    video=file_location,
-                    duration=metadata['duration'],
-                    disable_notification=True,
-                    thumb=thumbnail,
-                    reply_to_message_id=ReplyCheck(message)
-                )
+                try:
+                    o = await BOT.send_video(
+                        chat_id=message.chat.id,
+                        video=file_location,
+                        duration=metadata['duration'],
+                        disable_notification=True,
+                        thumb=thumbnail,
+                        reply_to_message_id=ReplyCheck(message)
+                    )
+
+                except KeyError as e:
+                    LOGS.warn(e)
+
+                    o = await BOT.send_video(
+                        chat_id=message.chat.id,
+                        video=file_location,
+                        disable_notification=True,
+                        reply_to_message_id=ReplyCheck(message)
+                    )
 
                 db.set(key, o.video.file_id)
                 clean_cache(file_location, thumbnail)
