@@ -37,7 +37,7 @@ text = '''
 
 
 def osrshs(username):
-    r = requests.get('https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player={}'.format(username))
+    r = requests.get('https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player={}'.format(username), verify=False)
     if r.status_code == 200:
         data = r.content.decode()
         data = data.split('\n')
