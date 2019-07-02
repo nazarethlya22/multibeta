@@ -14,7 +14,7 @@ def webm_to_mp4(webm):
     return output
 
 
-@BOT.on_message(Filters.document)
+@BOT.on_message(Filters.document & ~Filters.edited)
 async def conv_webm(bot: BOT, message: Message):
     filename = 'cache/' + message.document.file_name
     if 'webm' in os.path.splitext(filename)[-1].lower():
@@ -47,7 +47,7 @@ async def conv_webm(bot: BOT, message: Message):
             video=o.video.file_id,
             disable_notification=True
         )
-        
+
         os.remove(filename)
         os.remove(video)
     else:

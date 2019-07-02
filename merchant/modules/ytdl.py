@@ -303,7 +303,7 @@ def clean_cache(location: str, thumbnail: str):
         LOGS.warning(e)
 
 
-@BOT.on_message(Filters.regex(r'(?P<url>https?://[^\s]+)'))
+@BOT.on_message(Filters.regex(r'(?P<url>https?://[^\s]+)') & ~Filters.edited)
 async def message_handler(bot: BOT, message: Message):
     link = urlregex.search(message.text).group('url')
     cmd = get_cmds(message.text.lower().split(' ')[0])
