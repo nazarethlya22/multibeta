@@ -24,8 +24,10 @@ def site_allowed(link):
 def get_cmds(cmd):
     if 'get' in cmd:
         return 'get'
+
     elif 'audio' in cmd:
         return 'audio'
+
     else:
         return None
 
@@ -36,57 +38,107 @@ def getData(url):
     }
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         data = ydl.extract_info(url, download=False)
+
         return data
 
 
-async def link_handler(link, cmd, site):
+async def link_handler(link, cmd, site, message: Message):
     data = getData(link)
+    await BOT.send_chat_action(
+        chat_id=message.chat.id,
+        action='upload_document'
+    )
+
     key, ext = generate_key(link, cmd, data)
     value = db.get(key)
+
     if value is not None:
         return [value.decode(), data], ext, key
+
     if cmd:
         if 'audio' in cmd and bool('youtube' in site or 'youtu.be' in site or 'hooktube' in site or 'invidio' in site):
+            await BOT.send_chat_action(
+                chat_id=message.chat.id,
+                action='record_audio'
+            )
+
             data = executor.submit(get_yt_audio, link, data)
             while data.done() is False:
                 await asyncio.sleep(1)
+
             return data.result(), 'audio', key
 
         elif 'get' in cmd and bool('youtube' in site or 'youtu.be' in site or 'hooktube' in site or 'invidio' in site):
+            await BOT.send_chat_action(
+                chat_id=message.chat.id,
+                action='record_video'
+            )
+
             data = executor.submit(get_yt_video, link, data)
             while data.done() is False:
                 await asyncio.sleep(1)
+
             return data.result(), 'video', key
         
         elif 'audio' in cmd:
+            await BOT.send_chat_action(
+                chat_id=message.chat.id,
+                action='record_audio'
+            )
+
             data = executor.submit(get_audio, link, data)
             while data.done() is False:
                 await asyncio.sleep(1)
+
             return data.result(), 'audio', key
         
         elif 'get' in cmd:
+            await BOT.send_chat_action(
+                chat_id=message.chat.id,
+                action='record_video'
+            )
+
             data = executor.submit(get_video, link, data)
             while data.done() is False:
                 await asyncio.sleep(1)
+
             return data.result(), 'audio', key
 
     else:
         if 'Music' in data['categories']:
+            await BOT.send_chat_action(
+                chat_id=message.chat.id,
+                action='record_audio'
+            )
+
             data = executor.submit(get_yt_audio, link, data)
             while data.done() is False:
                 await asyncio.sleep(1)
+
             return data.result(), 'audio', key
 
         elif 'youtube' in site or 'hooktube' in site or 'invidio' in site or 'youtu.be' in site:
+            await BOT.send_chat_action(
+                chat_id=message.chat.id,
+                action='record_video'
+            )
+
             data = executor.submit(get_yt_video, link, data)
             while data.done() is False:
                 await asyncio.sleep(1)
+
             return data.result(), 'video', key
             
         else:
+            await BOT.send_chat_action(
+                chat_id=message.chat.id,
+                action='record_video'
+            )
+
             data = executor.submit(get_video, link, data)
             while data.done() is False:
                 await asyncio.sleep(1)
+
             return data.result(), 'video', key
 
 
@@ -98,12 +150,15 @@ def generate_key(link, cmd, data):
             if 'audio' in cmd:
                 key = key + 'audio/' + spliturl.query.split('&')[0]
                 return key, 'audio'
+
             elif 'get' in cmd:
                 key = key + 'video/' + spliturl.query.split('&')[0]
                 return key, 'video'
+
         elif 'Music' in data['categories']:
             key = key + 'audio/' + spliturl.query.split('&')[0]
             return key, 'audio'
+            
         else:
             key = key + 'video/' + spliturl.query.split('&')[0]
             return key, 'video'
@@ -160,6 +215,7 @@ def get_yt_audio(url, data=None, codec='opus'):
         ydl.download([url])
         filename = ydl.prepare_filename(data)
         filename = os.path.splitext(filename)[0] + '.opus'
+
         return [filename, data]
 
 
@@ -181,6 +237,7 @@ def get_yt_video(url, data=None):
             data = ydl.extract_info(url, download=False)
         ydl.download([url])
         filename = ydl.prepare_filename(data)
+
         return [filename, data]
 
 
@@ -202,6 +259,7 @@ def get_video(url, data=None):
         ydl.download([url])
         filename = ydl.prepare_filename(data)
         filename2 = os.path.splitext(filename)[0] + '.mp4'
+
         return filename2
 
 
@@ -224,6 +282,7 @@ def get_audio(url, data=None, codec='mp3'):
         ydl.download([url])
         filename = ydl.prepare_filename(data)
         filename2 = os.path.splitext(filename)[0] + '.mp3'
+
         return filename2
 
 
@@ -231,8 +290,10 @@ def clean_cache(location: str, thumbnail: str):
     try:
         if os.path.exists(location):
             os.remove(location)
+
         if os.path.exists(thumbnail):
             os.remove(thumbnail)
+
     except TypeError as e:
         LOGS.warning(e)
 
@@ -245,10 +306,10 @@ async def message_handler(bot: BOT, message: Message):
 
     if cmd or site:
         if cmd:
-            data, ext, key = await link_handler(link, cmd, site)
+            data, ext, key = await link_handler(link, cmd, site, message)
 
         elif site:
-            data, ext, key = await link_handler(link, cmd, site)
+            data, ext, key = await link_handler(link, cmd, site, message)
 
         file_location = data[0]
 
@@ -259,15 +320,22 @@ async def message_handler(bot: BOT, message: Message):
             try:
                 if os.path.getsize(thumbnail) > 200 * 1024:
                     thumbnail = None
+
             except FileNotFoundError:
                 thumbnail = None
 
             if 'audio' in ext:
                 if metadata['alt_title']:
                     tiitel = metadata['alt_title']
+
                 else:
                     tiitel = metadata['title']
-                
+
+                await BOT.send_chat_action(
+                    chat_id=message.chat.id,
+                    action='upload_audio'
+                )
+
                 o = await BOT.send_audio(
                     chat_id=message.chat.id,
                     audio=file_location,
@@ -290,6 +358,11 @@ async def message_handler(bot: BOT, message: Message):
                 )
                 
             elif 'video' in ext:
+                await BOT.send_chat_action(
+                    chat_id=message.chat.id,
+                    action='upload_video'
+                )
+
                 o = await BOT.send_video(
                     chat_id=message.chat.id,
                     video=file_location,
