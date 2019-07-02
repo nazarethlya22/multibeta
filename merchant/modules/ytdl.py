@@ -17,6 +17,7 @@ def site_allowed(link):
     for allowed_site in allowed_sites:
         if allowed_site in link:
             return allowed_site
+
     else:
         return None
 
@@ -27,6 +28,9 @@ def get_cmds(cmd):
 
     elif 'audio' in cmd:
         return 'audio'
+
+    elif 'mp3' in cmd:
+        return 'mp3'
 
     else:
         return None
@@ -158,7 +162,7 @@ def generate_key(link, cmd, data):
         elif 'Music' in data['categories']:
             key = key + 'audio/' + spliturl.query.split('&')[0]
             return key, 'audio'
-            
+
         else:
             key = key + 'video/' + spliturl.query.split('&')[0]
             return key, 'video'
@@ -169,6 +173,7 @@ def generate_key(link, cmd, data):
             if 'audio' in cmd:
                 key = key + 'audio/v=' + spliturl[2][1:]
                 return key, 'audio'
+
             elif 'get' in cmd:
                 key = key + 'video/v=' + spliturl[2][1:]
                 return key, 'video'
@@ -214,7 +219,7 @@ def get_yt_audio(url, data=None, codec='opus'):
             data = ydl.extract_info(url, download=False)
         ydl.download([url])
         filename = ydl.prepare_filename(data)
-        filename = os.path.splitext(filename)[0] + '.opus'
+        filename = os.path.splitext(filename)[0] + '.' + codec
 
         return [filename, data]
 
@@ -258,9 +263,9 @@ def get_video(url, data=None):
             data = ydl.extract_info(url, download=False)
         ydl.download([url])
         filename = ydl.prepare_filename(data)
-        filename2 = os.path.splitext(filename)[0] + '.mp4'
+        filename = os.path.splitext(filename)[0] + '.mp4'
 
-        return filename2
+        return [filename, data]
 
 
 def get_audio(url, data=None, codec='mp3'):
@@ -281,9 +286,9 @@ def get_audio(url, data=None, codec='mp3'):
             data = ydl.extract_info(url, download=False)
         ydl.download([url])
         filename = ydl.prepare_filename(data)
-        filename2 = os.path.splitext(filename)[0] + '.mp3'
+        filename = os.path.splitext(filename)[0] + '.' + codec
 
-        return filename2
+        return [filename, data]
 
 
 def clean_cache(location: str, thumbnail: str):
