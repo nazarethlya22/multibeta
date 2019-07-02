@@ -6,10 +6,12 @@ from merchant.modules import ALL_MODULES
 from merchant import BOT, LOGS
 
 
+# Load modules
 for module_name in ALL_MODULES:
     imported_module = importlib.import_module("merchant.modules." + module_name)
 
 
+# Asynchronous function to start the bot
 async def main():
     await BOT.start()
     await BOT.idle()

@@ -28,7 +28,7 @@ async def post_kot_gif(bot: BOT, message: Message):
             chat_id=message.chat.id,
             animation=kot_gif,
             reply_to_message_id=ReplyCheck(message),
-            disable_notification=True,
+            disable_notification=True
         )
 
 
@@ -40,5 +40,5 @@ async def post_kot(bot: BOT, message: Message):
             chat_id=message.chat.id,
             photo=kot_link,
             reply_to_message_id=ReplyCheck(message),
-            disable_notification=True,
+            disable_notification=True
         )

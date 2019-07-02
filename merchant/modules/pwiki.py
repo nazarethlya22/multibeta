@@ -817,12 +817,16 @@ def wikipedia_summary(topic):
 async def pwiki(bot: BOT, message: Message):
     drug = message.text.replace("/pwiki ", "")
     text = get_drug(drug)
+    
     await BOT.send_message(
         chat_id=message.chat.id,
         text=text[0],
         disable_notification=True,
         reply_to_message_id=ReplyCheck(message),
     )
-    await BOT.send_message(chat_id=message.chat.id, text=text[1], disable_notification=True)
-    if message.from_user.is_self:
-        message.delete()
+
+    await BOT.send_message(
+        chat_id=message.chat.id,
+        text=text[1],
+        disable_notification=True
+        )

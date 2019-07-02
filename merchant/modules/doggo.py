@@ -34,7 +34,8 @@ async def send_dog(bot: BOT, message: Message):
             chat_id=message.chat.id,
             animation=link_to_image,
             disable_notification=True,
-            reply_to_message_id=ReplyCheck(message))
+            reply_to_message_id=ReplyCheck(message)
+        )
 
 
 @BOT.on_message(Filters.regex("(?i)(post|get|send) (dog|doggo|woof|🐶|🐕)"))
@@ -46,7 +47,8 @@ async def send_dog_gif(bot: BOT, message: Message):
             link_to_image = get_doggo()
 
         await BOT.send_photo(
-        chat_id=message.chat.id,
-        photo=link_to_image,
-        disable_notification=True,
-        reply_to_message_id=ReplyCheck(message))
+            chat_id=message.chat.id,
+            photo=link_to_image,
+            disable_notification=True,
+            reply_to_message_id=ReplyCheck(message)
+        )

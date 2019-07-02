@@ -29,5 +29,5 @@ async def wiki(bot: BOT, message: Message):
         chat_id=message.chat.id,
         text=summary,
         disable_notification=True,
-        reply_to_message_id=ReplyCheck(message),
+        reply_to_message_id=ReplyCheck(message)
     )

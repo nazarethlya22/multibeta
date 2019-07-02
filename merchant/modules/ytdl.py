@@ -289,7 +289,6 @@ async def message_handler(bot: BOT, message: Message):
                     disable_notification=True
                 )
                 
-
             elif 'video' in ext:
                 o = await BOT.send_video(
                     chat_id=message.chat.id,

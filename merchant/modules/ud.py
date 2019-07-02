@@ -39,12 +39,9 @@ def define_word_ud(word):
         return five_definitions
 
     data = get_data(word)
-    if not data:
-        return "Found nothing on Urban Dictionary"
-    else:
-        definitions = get_definitions(data)
-        five_definitions = get_five_results(definitions)
-        return five_definitions
+    definitions = get_definitions(data)
+    five_definitions = get_five_results(definitions)
+    return five_definitions
 
 
 @BOT.on_message(Filters.command("ud", "/"))
