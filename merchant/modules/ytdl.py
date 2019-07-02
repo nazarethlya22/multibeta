@@ -106,7 +106,7 @@ async def link_handler(link, cmd, site, message: Message):
             while data.done() is False:
                 await asyncio.sleep(1)
 
-            return data.result(), 'audio', key
+            return data.result(), 'video', key
 
     else:
         if 'Music' in data['categories']:
@@ -330,11 +330,15 @@ async def message_handler(bot: BOT, message: Message):
                 thumbnail = None
 
             if 'audio' in ext:
-                if metadata['alt_title']:
-                    tiitel = metadata['alt_title']
+                try:
+                    if metadata['alt_title']:
+                        tiitel = metadata['alt_title']
+                    else:
+                        tiitel = metadata['title']
 
-                else:
-                    tiitel = metadata['title']
+                except KeyError as e:
+                    LOGS.warn(e)
+                    tiitel = ''
 
                 await BOT.send_chat_action(
                     chat_id=message.chat.id,
