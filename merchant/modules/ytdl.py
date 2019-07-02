@@ -285,6 +285,7 @@ async def message_handler(bot: BOT, message: Message):
                 await BOT.send_audio(
                     chat_id=-1001496485217,
                     audio=o.audio.file_id,
+                    caption=link,
                     disable_notification=True
                 )
                 
@@ -305,5 +306,6 @@ async def message_handler(bot: BOT, message: Message):
                 await BOT.send_video(
                     chat_id=-1001496485217,
                     video=o.video.file_id,
+                    caption=link,
                     disable_notification=True
                 )
