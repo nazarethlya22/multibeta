@@ -37,7 +37,7 @@ text = '''
 
 
 def osrshs(username):
-    r = requests.get('https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player={}'.format(username), verify=False)
+    r = requests.get('https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player={}'.format(username))
     if r.status_code == 200:
         data = r.content.decode()
         data = data.split('\n')
@@ -82,5 +82,5 @@ async def osrshighscores(bot: BOT, message: Message):
     await BOT.send_message(
         chat_id=message.chat.id,
         text=stats,
-        reply_to_message_id=message.message.id
+        reply_to_message_id=message.message_id
     )
