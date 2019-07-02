@@ -23,7 +23,7 @@ async def conv_webm(bot: BOT, message: Message):
             action='record_video'
         )
 
-        await BOT.download_media(message, path='cache/')
+        await BOT.download_media(message, file_name=filename)
         output = executor.submit(webm_to_mp4, filename)
         video = output.result()
 
@@ -48,6 +48,7 @@ async def conv_webm(bot: BOT, message: Message):
             disable_notification=True
         )
         
+        os.remove(filename)
         os.remove(video)
     else:
         message.continue_propagation()
