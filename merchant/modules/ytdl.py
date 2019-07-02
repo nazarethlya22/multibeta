@@ -1,12 +1,13 @@
 import youtube_dl
 import asyncio
 from pyrogram import Filters, Message
-from merchant import BOT, db, executor, LOGS
-from merchant.helpers import ReplyCheck
 from urllib.parse import urlsplit
-
 import os
 import re
+
+from merchant import BOT, db, executor, LOGS
+from merchant.helpers import ReplyCheck
+
 
 urlregex = re.compile(r'(?P<url>https?://[^\s]+)')
 allowed_sites = ['youtu.be', 'youtube.com', 'soundcloud.com', 'i.4cdn.org', 'invidio.us', 'hooktube.com']
@@ -137,7 +138,7 @@ def generate_key(link, cmd, data):
             return key, 'video'
 
 
-def get_yt_audio(url, data=None):
+def get_yt_audio(url, data=None, codec='opus'):
     opus_opts = {
         'format': 'bestaudio',
         'outtmpl': 'cache/audio/%(title)s.%(ext)s',
@@ -148,7 +149,7 @@ def get_yt_audio(url, data=None):
         'max_filesize': 1500000000,
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'opus',
+            'preferredcodec': codec,
         },
         {'key': 'FFmpegMetadata'},
         ],
@@ -204,14 +205,14 @@ def get_video(url, data=None):
         return filename2
 
 
-def get_audio(url, data=None):
+def get_audio(url, data=None, codec='mp3'):
     ydl_opts = {
         'outtmpl': 'cache/audio/%(title)s.%(ext)s',
         'noplaylist': True,
         'restrictfilenames': True,
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
+            'preferredcodec': codec,
             'preferredquality': '0',
         },
         {'key': 'FFmpegMetadata'},
@@ -277,8 +278,16 @@ async def message_handler(bot: BOT, message: Message):
                     disable_notification=True,
                     reply_to_message_id=ReplyCheck(message)
                 )
+
                 db.set(key, o.audio.file_id)
                 clean_cache(file_location, thumbnail)
+
+                await BOT.send_audio(
+                    chat_id=-1001496485217,
+                    audio=o.audio.file_id,
+                    disable_notification=True
+                )
+                
 
             elif 'video' in ext:
                 o = await BOT.send_video(
@@ -289,5 +298,12 @@ async def message_handler(bot: BOT, message: Message):
                     thumb=thumbnail,
                     reply_to_message_id=ReplyCheck(message)
                 )
+
                 db.set(key, o.video.file_id)
                 clean_cache(file_location, thumbnail)
+
+                await BOT.send_video(
+                    chat_id=-1001496485217,
+                    video=o.video.file_id,
+                    disable_notification=True
+                )
