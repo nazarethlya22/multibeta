@@ -242,7 +242,7 @@ def get_yt_video(url, data=None):
             data = ydl.extract_info(url, download=False)
         ydl.download([url])
         filename = ydl.prepare_filename(data)
-
+        filename = os.path.splitext(filename)[0] + '.mp4'
         return [filename, data]
 
 
