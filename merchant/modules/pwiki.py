@@ -771,7 +771,6 @@ def summary(data):
     duration = "**Duration:** {}\n".format(duration_data(data))
     dangerous_interactions_list = dangerous_interactions(data)
     wp_summary = "**Wikipedia Summary:**\n{}\n\n".format(wikipedia_summary(s_name))
-    print(wp_summary)
     if dangerous_interactions_list is not "":
         interactions = "**Dangerous interactions:** {}\n".format(
             dangerous_interactions_list
