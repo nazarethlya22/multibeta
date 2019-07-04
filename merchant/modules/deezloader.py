@@ -14,6 +14,15 @@ urlregex = re.compile(r'(?P<url>https?://[^\s]+)')
 allowed_sites = ['open.spotify.com']
 
 
+def clean_cache(location: str):
+    try:
+        if os.path.exists(location):
+            os.remove(location)
+
+    except TypeError as e:
+        LOGS.warning(e)
+
+
 def site_allowed(link):
     for allowed_site in allowed_sites:
         if allowed_site in link:
@@ -34,10 +43,12 @@ async def spotify_handler(bot: BOT, message: Message):
         r = executor.submit(download_track, link)
         while r.done() is False:
             await asyncio.sleep(1)
+
         await BOT.send_audio(
         chat_id=message.chat.id,
         audio=r.result(),
         reply_to_message_id=ReplyCheck(message)
         )
+        clean_cache(r.result())
     else:
         message.continue_propagation()
