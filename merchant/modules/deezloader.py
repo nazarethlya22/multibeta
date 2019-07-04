@@ -34,7 +34,7 @@ async def spotify_handler(bot: BOT, message: Message):
         r = executor.submit(download_track, link)
         while r.done() is False:
             await asyncio.sleep(1)
-        BOT.send_audio(
+        await BOT.send_audio(
         chat_id=message.chat.id,
         audio=r.result(),
         reply_to_message_id=ReplyCheck(message)
