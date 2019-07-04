@@ -22,7 +22,7 @@ def site_allowed(link):
         return None
 
 
-def download_track(link, quality='flac'):
+def download_track(link, quality='FLAC'):
     r = deezer.download_trackspo(link, output='cache/deezloader/', quality=quality, recursive_quality=True, recursive_download=True)
     return r
 
