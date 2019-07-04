@@ -149,6 +149,8 @@ async def link_handler(link, cmd, site, message: Message):
                 await asyncio.sleep(1)
 
             return data.result(), 'video', key
+    else:
+        message.continue_propagation()
 
 
 def generate_key(link, cmd, data):
@@ -397,7 +399,7 @@ async def message_handler(bot: BOT, message: Message):
                         reply_to_message_id=ReplyCheck(message)
                     )
 
-                except KeyError as e:
+                except KeyError:
                     LOGS.warn(e)
 
                     o = await BOT.send_video(
@@ -415,10 +417,9 @@ async def message_handler(bot: BOT, message: Message):
                         caption=link,
                         disable_notification=True
                     )
-                except AttributeError as e:
-                    LOGS.warn(e)
+                except AttributeError:
                     db.set(key, o.animation.file_id)
-
+                    
                     await BOT.send_animation(
                         chat_id=-1001496485217,
                         animation=o.animation.file_id,

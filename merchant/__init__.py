@@ -34,6 +34,11 @@ REDIS_HOST = os.getenv("REDIS_HOST")
 REDIS_PORT = os.getenv("REDIS_PORT")
 REDIS_DB = os.getenv("REDIS_DB")
 
+# Deezloader configuration
+DL_USERNAME = os.getenv("DL_USERNAME")
+DL_PASSWORD = os.getenv("DL_PASSWORD")
+DL_ARL = os.getenv("DL_ARL")
+
 # Load APIs
 THECATAPI = os.getenv("THECATAPI")
 
