@@ -7,7 +7,7 @@ import mutagen
 
 from pyrogram import Filters, Message
 
-from merchant import BOT, executor, LOGS, DL_USERNAME, DL_PASSWORD, DL_ARL, executor
+from merchant import BOT, executor, LOGS, DL_USERNAME, DL_PASSWORD, DL_ARL
 from merchant.helpers import ReplyCheck
 
 
@@ -34,7 +34,14 @@ def site_allowed(link):
         return None
 
 
-def download_track(link, quality='FLAC'):
+def get_quality(message):
+    if 'flac' in message.lower():
+        return 'FLAC'
+    else:
+        return 'MP3_320'
+
+
+def download_track(link, quality='MP3_320'):
     r = deezer.download_trackspo(link, output='cache/deezloader/', quality=quality, recursive_quality=True, recursive_download=True)
     return r
 
@@ -43,7 +50,9 @@ def download_track(link, quality='FLAC'):
 async def spotify_handler(bot: BOT, message: Message):
     link = urlregex.search(message.text).group('url')
     if site_allowed(link) is not None:
-        r = executor.submit(download_track, link)
+        quality = get_quality(message.text)
+        r = executor.submit(download_track, link, quality)
+
         while r.done() is False:
             await asyncio.sleep(1)
 
