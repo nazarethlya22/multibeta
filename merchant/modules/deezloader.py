@@ -1,7 +1,10 @@
 import re
+import os
 import asyncio
 
 import deezloader
+import mutagen
+
 from pyrogram import Filters, Message
 
 from merchant import BOT, executor, LOGS, DL_USERNAME, DL_PASSWORD, DL_ARL, executor
@@ -44,11 +47,23 @@ async def spotify_handler(bot: BOT, message: Message):
         while r.done() is False:
             await asyncio.sleep(1)
 
+        result = r.result()
+        metadata = mutagen.flac.Open(result)
+
+        length = metadata['length'][0]
+        artist = metadata['albumartist'][0]
+        title = metadata['title'][0]
+
         await BOT.send_audio(
         chat_id=message.chat.id,
-        audio=r.result(),
+        audio=result,
+        performer=artist,
+        title=title,
+        duration=length,
+        disable_notification=True,
         reply_to_message_id=ReplyCheck(message)
         )
-        clean_cache(r.result())
+        
+        clean_cache(result)
     else:
         message.continue_propagation()
