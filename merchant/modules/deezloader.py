@@ -57,7 +57,11 @@ async def spotify_handler(bot: BOT, message: Message):
             await asyncio.sleep(1)
 
         result = r.result()
-        metadata = mutagen.flac.Open(result)
+
+        if 'FLAC' in quality:
+            metadata = mutagen.flac.Open(result)
+        else:
+            metadata = mutagen.mp3.Open(result)
 
         length = int(metadata['length'][0])
         artist = str(metadata['albumartist'][0])
