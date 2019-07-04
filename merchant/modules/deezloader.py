@@ -50,9 +50,9 @@ async def spotify_handler(bot: BOT, message: Message):
         result = r.result()
         metadata = mutagen.flac.Open(result)
 
-        length = metadata['length'][0]
-        artist = metadata['albumartist'][0]
-        title = metadata['title'][0]
+        length = int(metadata['length'][0])
+        artist = str(metadata['albumartist'][0])
+        title = str(metadata['title'][0])
 
         await BOT.send_audio(
         chat_id=message.chat.id,
@@ -63,7 +63,7 @@ async def spotify_handler(bot: BOT, message: Message):
         disable_notification=True,
         reply_to_message_id=ReplyCheck(message)
         )
-        
+
         clean_cache(result)
     else:
         message.continue_propagation()
