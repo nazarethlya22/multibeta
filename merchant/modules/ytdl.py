@@ -10,7 +10,7 @@ from merchant.helpers import ReplyCheck
 
 
 urlregex = re.compile(r'(?P<url>https?://[^\s]+)')
-allowed_sites = ['youtu.be', 'youtube.com', 'soundcloud.com', 'i.4cdn.org', 'invidio.us', 'hooktube.com']
+allowed_sites = ['youtu.be', 'youtube.com', 'soundcloud.com', 'i.4cdn.org', 'invidio.us', 'hooktube.com', '4cdn.com']
 
 
 def site_allowed(link):
@@ -137,6 +137,18 @@ async def link_handler(link, cmd, site, message: Message):
                 await asyncio.sleep(1)
 
             return data.result(), 'video', key
+        
+        elif '4cdn.com' in link and 'webm' in link:
+            await BOT.send_chat_action(
+                chat_id=message.chat.id,
+                action='record_video'
+            )
+            
+            data = executor.submit(get_yt_video, link, data)
+            while data.done() is False:
+                await asyncio.sleep(1)
+
+                return data.result(), 'video', key
             
         else:
             await BOT.send_chat_action(
