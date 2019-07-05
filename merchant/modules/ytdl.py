@@ -200,9 +200,11 @@ def generate_key(link, cmd, data):
         elif 'Music' in data['categories']:
             key = key + 'audio/v=' + spliturl[2][1:]
             return key, 'audio'
+
         else:
             key = key + 'video/v=' + spliturl[2][1:]
             return key, 'video'
+        
     elif 'soundcloud.com' in link:
         key = 'soundcloud/' + spliturl[2][1:]
         return key, 'audio'
@@ -210,10 +212,12 @@ def generate_key(link, cmd, data):
     elif '4cdn.com' in link:
         key = 'video/' + link
         return key, 'video'
+
     elif cmd:
         if 'audio' in cmd:
             key = 'audio/' + link
             return key, 'audio'
+
         elif 'get' in cmd:
             key = 'video/' + link
             return key, 'video'
@@ -413,7 +417,7 @@ async def message_handler(bot: BOT, message: Message):
                         reply_to_message_id=ReplyCheck(message)
                     )
 
-                except KeyError:
+                except KeyError as e:
                     LOGS.warn(e)
 
                     o = await BOT.send_video(
