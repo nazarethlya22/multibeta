@@ -143,7 +143,7 @@ async def link_handler(link, cmd, site, message: Message):
                 chat_id=message.chat.id,
                 action='record_video'
             )
-            
+
             data = executor.submit(get_yt_video, link, data)
             while data.done() is False:
                 await asyncio.sleep(1)
@@ -203,11 +203,13 @@ def generate_key(link, cmd, data):
         else:
             key = key + 'video/v=' + spliturl[2][1:]
             return key, 'video'
-        
     elif 'soundcloud.com' in link:
         key = 'soundcloud/' + spliturl[2][1:]
         return key, 'audio'
-
+    
+    elif '4cdn.com' in link:
+        key = 'video/' + link
+        return key, 'video'
     elif cmd:
         if 'audio' in cmd:
             key = 'audio/' + link
