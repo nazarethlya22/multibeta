@@ -9,7 +9,7 @@ from merchant.helpers import ReplyCheck
 
 
 def convert(filename, codec):
-    output = os.path.splitext(audio)[0] + '.' + codec
+    output = os.path.splitext(filename)[0] + '.' + codec
     subprocess.run(["ffmpeg", "-i", filename, output])
     return output
 
@@ -76,7 +76,7 @@ async def mp3_convert(bot: BOT, message: Message):
 
         await BOT.download_media(message.reply_to_message, file_name=filename)
         output = executor.submit(convert, filename, 'mp3')
-        
+
         while output.done() is False:
             await asyncio.sleep(1)
         
