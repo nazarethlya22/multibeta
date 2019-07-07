@@ -22,8 +22,8 @@ def audio_to_mp3(audio):
 
 @BOT.on_message(Filters.document & ~Filters.edited)
 async def conv_file(bot: BOT, message: Message):
-    filename = 'cache/' + message.document.file_name
-    if 'webm' in os.path.splitext(filename)[-1].lower():
+    if 'webm' in os.path.splitext(message.document.file_name)[-1].lower():
+        filename = 'cache/' + message.document.file_name
         await BOT.send_chat_action(
             chat_id=message.chat.id,
             action='record_video'
@@ -57,7 +57,8 @@ async def conv_file(bot: BOT, message: Message):
         os.remove(filename)
         os.remove(video)
 
-    elif 'mp3' in message.text and message.document.file_name:
+    elif 'mp3' in message.text and message.reply_to_message.document.file_name:
+        filename = filename = 'cache/' + message.reply_to_message.document.file_name
         await BOT.send_chat_action(
             chat_id=message.chat.id,
             action='record_audio'

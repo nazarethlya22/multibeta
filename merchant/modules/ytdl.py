@@ -52,9 +52,17 @@ async def link_handler(link, cmd, site, message: Message):
         chat_id=message.chat.id,
         action='upload_document'
     )
+    
+    try:
+        key, ext = generate_key(link, cmd, data)
+        value = db.get(key)
 
-    key, ext = generate_key(link, cmd, data)
-    value = db.get(key)
+    except TypeError:
+        key = None
+        value = None
+        ext = None
+        if 'mp3' in cmd:
+            ext = 'audio'
 
     if value is not None and 'mp3' not in cmd:
         return [value.decode(), data], ext, key
