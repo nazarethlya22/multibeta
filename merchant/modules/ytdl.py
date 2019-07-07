@@ -81,7 +81,7 @@ async def link_handler(link, cmd, site, message: Message):
 
                 return data.result(), 'audio', key
 
-            if 'audio' in cmd and bool('youtube' in site or 'youtu.be' in site or 'hooktube' in site or 'invidio' in site):
+            elif 'audio' in cmd and bool('youtube' in site or 'youtu.be' in site or 'hooktube' in site or 'invidio' in site):
                 await BOT.send_chat_action(
                     chat_id=message.chat.id,
                     action='record_audio'
@@ -109,7 +109,7 @@ async def link_handler(link, cmd, site, message: Message):
                 raise TypeError()
 
         except TypeError:
-            if 'audio' in cmd:
+            if 'audio' in cmd or 'mp3' in cmd:
                 await BOT.send_chat_action(
                     chat_id=message.chat.id,
                     action='record_audio'
