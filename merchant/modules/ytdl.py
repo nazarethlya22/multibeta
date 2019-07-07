@@ -56,11 +56,23 @@ async def link_handler(link, cmd, site, message: Message):
     key, ext = generate_key(link, cmd, data)
     value = db.get(key)
 
-    if value is not None:
+    if value is not None and 'mp3' not in cmd:
         return [value.decode(), data], ext, key
 
     if cmd:
         try:
+            if 'mp3' in cmd and bool('youtube' in site or 'youtu.be' in site or 'hooktube' in site or 'invidio' in site):
+                await BOT.send_chat_action(
+                    chat_id=message.chat.id,
+                    action='record_audio'
+                )
+
+                data = executor.submit(get_yt_audio, link, data, 'mp3')
+                while data.done() is False:
+                    await asyncio.sleep(1)
+
+                return data.result(), 'audio', key
+
             if 'audio' in cmd and bool('youtube' in site or 'youtu.be' in site or 'hooktube' in site or 'invidio' in site):
                 await BOT.send_chat_action(
                     chat_id=message.chat.id,
@@ -391,7 +403,8 @@ async def message_handler(bot: BOT, message: Message):
                         reply_to_message_id=ReplyCheck(message)
                     )
 
-                db.set(key, o.audio.file_id)
+                if 'mp3' not in ext:
+                    db.set(key, o.audio.file_id)
                 clean_cache(file_location, thumbnail)
 
                 await BOT.send_audio(
