@@ -76,10 +76,11 @@ async def mp3_convert(bot: BOT, message: Message):
 
         await BOT.download_media(message.reply_to_message, file_name=filename)
         output = executor.submit(convert, filename, 'mp3')
-        audio = output.result()
-
+        
         while output.done() is False:
             await asyncio.sleep(1)
+        
+        audio = output.result()
 
         await BOT.send_chat_action(
             chat_id=message.chat.id,
