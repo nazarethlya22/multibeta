@@ -9,7 +9,13 @@ import dotenv
 from pyrogram import Client
 from walrus import Walrus
 
-logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO,
+    filename='botlog.txt',
+    filemode='a'
+    )
+
 logging.getLogger("pyrogram").setLevel(logging.WARN)
 LOGS = logging.getLogger(__name__)
 
