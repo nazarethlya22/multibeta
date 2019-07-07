@@ -57,7 +57,8 @@ async def conv_file(bot: BOT, message: Message):
         os.remove(filename)
         os.remove(video)
 
-    elif 'mp3' in message.text and message.reply_to_message.document.file_name:
+    elif 'mp3' in message.text and message.reply_to_message.document.file_name \
+        and 'mp3' not in os.path.splitext(message.reply_to_message.audio.file_name)[-1].lower():
         filename = filename = 'cache/' + message.reply_to_message.document.file_name
         await BOT.send_chat_action(
             chat_id=message.chat.id,
@@ -91,5 +92,13 @@ async def conv_file(bot: BOT, message: Message):
 
         os.remove(filename)
         os.remove(audio)
+
+    elif 'mp3' in os.path.splitext(message.reply_to_message.audio.file_name)[-1].lower():
+        await BOT.send_message(
+            chat_id=message.chat.id,
+            text='File already in mp3',
+            reply_to_message_id=message.message_id
+        )
+        
     else:
         message.continue_propagation()
