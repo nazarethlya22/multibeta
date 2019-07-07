@@ -58,7 +58,7 @@ async def conv_file(bot: BOT, message: Message):
             os.remove(filename)
             os.remove(video)
     except AttributeError:
-        if 'mp3' in message.text and message.reply_to_message.document.file_name \
+        if 'mp3' in message.text and message.reply_to_message.audio.file_name \
             and 'mp3' not in os.path.splitext(message.reply_to_message.audio.file_name)[-1].lower():
             filename = filename = 'cache/' + message.reply_to_message.document.file_name
             await BOT.send_chat_action(
