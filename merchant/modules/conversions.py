@@ -20,7 +20,7 @@ def audio_to_mp3(audio):
     return output
 
 
-@BOT.on_message(Filters.document & ~Filters.edited)
+@BOT.on_message((Filters.document & ~Filters.edited) | Filters.regex('mp3'))
 async def conv_file(bot: BOT, message: Message):
     if 'webm' in os.path.splitext(message.document.file_name)[-1].lower():
         filename = 'cache/' + message.document.file_name
@@ -99,6 +99,6 @@ async def conv_file(bot: BOT, message: Message):
             text='File already in mp3',
             reply_to_message_id=message.message_id
         )
-        
+
     else:
         message.continue_propagation()
