@@ -74,7 +74,7 @@ async def mp3_convert(bot: BOT, message: Message):
             action='record_audio'
         )
 
-        await BOT.download_media(message, file_name=filename)
+        await BOT.download_media(message.reply_to_message, file_name=filename)
         output = executor.submit(convert, filename, 'mp3')
         audio = output.result()
 
@@ -101,3 +101,6 @@ async def mp3_convert(bot: BOT, message: Message):
 
         os.remove(filename)
         os.remove(audio)
+    
+    else:
+        message.continue_propagation()

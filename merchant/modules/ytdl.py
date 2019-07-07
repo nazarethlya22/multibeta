@@ -52,7 +52,7 @@ async def link_handler(link, cmd, site, message: Message):
         chat_id=message.chat.id,
         action='upload_document'
     )
-    
+
     try:
         key, ext = generate_key(link, cmd, data)
         value = db.get(key)
@@ -467,3 +467,6 @@ async def message_handler(bot: BOT, message: Message):
                     )
 
                 clean_cache(file_location, thumbnail)
+    
+    else:
+        message.continue_propagation()
