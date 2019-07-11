@@ -467,7 +467,7 @@ async def message_handler(bot: BOT, message: Message):
     await handler(bot, message, link)
 
 
-@BOT.on_message(Filters.command(prefix=['get', 'audio', 'mp3']) & Filters.reply & ~Filters.edited)
+@BOT.on_message(Filters.command(commands=['get', 'audio', 'mp3']) & Filters.reply & ~Filters.edited)
 async def ytdl_reply(bot: BOT, message: Message):
     if urlregex.match(message.reply_to_message.text):
         link = urlregex.search(message.reply_to_message.text).group('url')
