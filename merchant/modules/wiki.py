@@ -26,6 +26,7 @@ async def wiki(bot: BOT, message: Message):
                 break
     else:
         topic = ' '.join(message.command[1:])
+        lang = 'en'
 
     summary = wikipedia_summary(topic, lang)
 
