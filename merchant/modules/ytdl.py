@@ -25,13 +25,10 @@ def site_allowed(link):
 def get_cmds(cmd):
     if 'get' in cmd:
         return 'get'
-
     elif 'audio' in cmd:
         return 'audio'
-
     elif 'mp3' in cmd:
         return 'mp3'
-
     else:
         return None
 
@@ -42,7 +39,6 @@ def getData(url):
     }
     with youtube_dl.YoutubeDL(ydl_opts) as ydl:
         data = ydl.extract_info(url, download=False)
-
         return data
 
 
@@ -53,16 +49,8 @@ async def link_handler(link, cmd, site, message: Message):
         action='upload_document'
     )
 
-    try:
-        key, ext = generate_key(link, cmd, data)
-        value = db.get(key)
-
-    except TypeError:
-        key = None
-        value = None
-        ext = None
-        if 'mp3' in cmd:
-            ext = 'audio'
+    key, ext = generate_key(link, cmd, data)
+    value = db.get(key)
 
     try:
         if value:
@@ -82,7 +70,6 @@ async def link_handler(link, cmd, site, message: Message):
                 data = executor.submit(get_yt_audio, link, data, 'mp3')
                 while data.done() is False:
                     await asyncio.sleep(1)
-
                 return data.result(), 'audio', key
 
             elif 'audio' in cmd and bool('youtube' in site or 'youtu.be' in site or 'hooktube' in site or 'invidio' in site):
@@ -94,7 +81,6 @@ async def link_handler(link, cmd, site, message: Message):
                 data = executor.submit(get_yt_audio, link, data)
                 while data.done() is False:
                     await asyncio.sleep(1)
-
                 return data.result(), 'audio', key
 
             elif 'get' in cmd and bool('youtube' in site or 'youtu.be' in site or 'hooktube' in site or 'invidio' in site):
@@ -106,7 +92,6 @@ async def link_handler(link, cmd, site, message: Message):
                 data = executor.submit(get_yt_video, link, data)
                 while data.done() is False:
                     await asyncio.sleep(1)
-
                 return data.result(), 'video', key
 
             else:
@@ -122,7 +107,6 @@ async def link_handler(link, cmd, site, message: Message):
                 data = executor.submit(get_audio, link, data)
                 while data.done() is False:
                     await asyncio.sleep(1)
-
                 return data.result(), 'audio', key
             
             elif 'get' in cmd:
@@ -134,7 +118,6 @@ async def link_handler(link, cmd, site, message: Message):
                 data = executor.submit(get_video, link, data)
                 while data.done() is False:
                     await asyncio.sleep(1)
-
                 return data.result(), 'video', key
 
     elif link:
@@ -147,7 +130,6 @@ async def link_handler(link, cmd, site, message: Message):
             data = executor.submit(get_yt_audio, link, data)
             while data.done() is False:
                 await asyncio.sleep(1)
-
             return data.result(), 'audio', key
 
         elif 'youtube' in site or 'hooktube' in site or 'invidio' in site or 'youtu.be' in site:
@@ -159,7 +141,6 @@ async def link_handler(link, cmd, site, message: Message):
             data = executor.submit(get_yt_video, link, data)
             while data.done() is False:
                 await asyncio.sleep(1)
-
             return data.result(), 'video', key
         
         elif '4cdn.com' in link and 'webm' in link:
@@ -171,8 +152,7 @@ async def link_handler(link, cmd, site, message: Message):
             data = executor.submit(get_yt_video, link, data)
             while data.done() is False:
                 await asyncio.sleep(1)
-
-                return data.result(), 'video', key
+            return data.result(), 'video', key
             
         else:
             await BOT.send_chat_action(
@@ -183,7 +163,6 @@ async def link_handler(link, cmd, site, message: Message):
             data = executor.submit(get_video, link, data)
             while data.done() is False:
                 await asyncio.sleep(1)
-
             return data.result(), 'video', key
     else:
         message.continue_propagation()
@@ -201,6 +180,10 @@ def generate_key(link, cmd, data):
             elif 'get' in cmd:
                 key = key + 'video/' + spliturl.query.split('&')[0]
                 return key, 'video'
+
+            elif 'mp3' in cmd:
+                key = key + 'audio/mp3/' + spliturl.query.split('&')[0]
+                return key, 'audio'
 
         elif 'Music' in data['categories']:
             key = key + 'audio/' + spliturl.query.split('&')[0]
@@ -220,6 +203,10 @@ def generate_key(link, cmd, data):
             elif 'get' in cmd:
                 key = key + 'video/v=' + spliturl[2][1:]
                 return key, 'video'
+
+            elif 'mp3' in cmd:
+                key = key + 'audio/mp3/v=' + spliturl[2][1:]
+                return key, 'audio'
 
         elif 'Music' in data['categories']:
             key = key + 'audio/v=' + spliturl[2][1:]
@@ -245,6 +232,10 @@ def generate_key(link, cmd, data):
         elif 'get' in cmd:
             key = 'video/' + link
             return key, 'video'
+
+        elif 'mp3' in cmd:
+            key = 'audio/mp3/' + link
+            return key, 'audio'
 
 
 def get_yt_audio(url, data=None, codec='opus'):
