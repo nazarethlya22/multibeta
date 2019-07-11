@@ -25,7 +25,8 @@ async def up(bot: BOT, message: Message):
 
 @BOT.on_message(Filters.command('ping', '!'))
 async def ping(bot:  BOT, message: Message):
+    print(message.command)
     ip = message.command[2]
-    data = loop.subprocess_exec(['ping', ip , '-c', '4'], stdout=subprocess.PIPE)
+    data = await loop.subprocess_exec(['ping', ip , '-c', '4'], stdout=subprocess.PIPE)
     result = data.result().stdout
-    message.reply(result)
+    await message.reply(result)
