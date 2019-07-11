@@ -19,7 +19,7 @@ def get_month(message):
         11: "November",
         12: "December"
     }
-    int_month: int = datetime.utcfromtimestamp(message.reply_to_message.forward_date).strftime('%m')
+    int_month = int(datetime.utcfromtimestamp(message.reply_to_message.forward_date).strftime('%m'))
     return switcher.get(int_month)
 
 
@@ -29,10 +29,10 @@ async def get_forwarded_message_date(bot: BOT, message: Message):
     month = get_month(message)
     day = datetime.utcfromtimestamp(message.reply_to_message.forward_date).strftime('%d')
     time = datetime.utcfromtimestamp(message.reply_to_message.forward_date).strftime('%H:%M:%S')
-    original_date = '{}.{}.{} at {}'.format(day, month, year, time)
-    
+    original_date = '{}. {}. {} at {}'.format(day, month, year, time)
+
     await BOT.send_message(
         chat_id=message.chat.id,
-        text='This message was sent: {}'.format(original_date),
+        text='This message was sent on {}'.format(original_date),
         reply_to_message_id=message.reply_to_message.message_id
     )
