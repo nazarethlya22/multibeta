@@ -44,7 +44,7 @@ def define_word_ud(word):
     return five_definitions
 
 
-@BOT.on_message(Filters.command("ud", "/"))
+@BOT.on_message(Filters.command("ud", "/") & ~Filters.edited)
 async def post_ud(bot: BOT, message: Message):
     message_text = message.text.replace("/ud ", "")
     text = define_word_ud(message_text)

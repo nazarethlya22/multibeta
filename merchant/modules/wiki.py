@@ -17,7 +17,7 @@ def wikipedia_summary(topic, lang='en'):
     return text
 
 
-@BOT.on_message(Filters.command("wiki", "/"))
+@BOT.on_message(Filters.command("wiki", "/") & ~Filters.edited)
 async def wiki(bot: BOT, message: Message):
     topic = message.text.replace("/wiki ", "")
     summary = wikipedia_summary(topic)

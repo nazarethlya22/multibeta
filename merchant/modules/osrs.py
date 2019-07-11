@@ -20,7 +20,7 @@ def osrswiki(search_string):
     return text
 
 
-@BOT.on_message(Filters.command("oswiki", "/"))
+@BOT.on_message(Filters.command("oswiki", "/") & ~Filters.edited)
 async def wiki(bot: BOT, message: Message):
     topic = message.text.replace("/oswiki ", "")
     summary = osrswiki(topic)

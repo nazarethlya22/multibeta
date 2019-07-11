@@ -26,7 +26,7 @@ def get_doggo():
         return url
 
 
-@BOT.on_message(Filters.regex("(?i)(post|get|send) (shibe|dog|doggo|woof|🐶|🐕) (gif|gifs)"))
+@BOT.on_message(Filters.regex("(?i)(post|get|send) (shibe|dog|doggo|woof|🐶|🐕) (gif|gifs)") & ~Filters.edited)
 async def send_dog(bot: BOT, message: Message):
     if re.match("(?i)(post|get|send) (dog|doggo|woof|🐶|🐕) (gif|gifs)", message.text):
         link_to_image = get_dog("webm,png,jpg,jpeg")
@@ -38,7 +38,7 @@ async def send_dog(bot: BOT, message: Message):
         )
 
 
-@BOT.on_message(Filters.regex("(?i)(post|get|send) (shibe|dog|doggo|woof|🐶|🐕)"))
+@BOT.on_message(Filters.regex("(?i)(post|get|send) (shibe|dog|doggo|woof|🐶|🐕)") & ~Filters.edited)
 async def send_dog_gif(bot: BOT, message: Message):
     if re.match("(?i)(post|get|send) (dog|doggo|woof|🐶|🐕)", message.text):
         if randint(0, 1) == 1:

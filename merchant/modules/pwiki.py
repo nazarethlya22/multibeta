@@ -812,7 +812,7 @@ def wikipedia_summary(topic):
         return text
 
 
-@BOT.on_message(Filters.command("pwiki", "/"))
+@BOT.on_message(Filters.command("pwiki", "/") & ~Filters.edited)
 async def pwiki(bot: BOT, message: Message):
     drug = message.text.replace("/pwiki ", "")
     text = get_drug(drug)
