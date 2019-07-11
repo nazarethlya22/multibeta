@@ -67,7 +67,6 @@ async def link_handler(link, cmd, site, message: Message):
                 )
 
                 data = executor.submit(get_yt_audio, link, data, 'mp3')
-                asyncio.subprocess.
                 while data.done() is False:
                     await asyncio.sleep(1)
                 return data.result(), 'audio', key
