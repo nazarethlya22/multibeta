@@ -1,6 +1,4 @@
 import requests
-import asyncio
-
 from random import randint
 import re
 

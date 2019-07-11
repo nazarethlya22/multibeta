@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from pyrogram import Filters, Message
-from merchant import BOT, LOGS
+from merchant import BOT
 
 
 def get_month(message):

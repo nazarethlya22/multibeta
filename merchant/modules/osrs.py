@@ -1,4 +1,3 @@
-import asyncio
 from pyrogram import Filters, Message
 
 from merchant import BOT

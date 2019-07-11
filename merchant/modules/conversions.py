@@ -4,7 +4,7 @@ import subprocess
 
 from pyrogram import Filters, Message
 
-from merchant import BOT, db, executor, LOGS
+from merchant import BOT, executor
 from merchant.helpers import ReplyCheck
 
 

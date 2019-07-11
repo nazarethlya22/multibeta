@@ -1,5 +1,4 @@
 import requests
-import asyncio
 import re
 
 from pyrogram import Filters, Message

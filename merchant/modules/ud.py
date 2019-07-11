@@ -1,5 +1,4 @@
 import requests
-import asyncio
 
 from pyrogram import Filters, Message
 

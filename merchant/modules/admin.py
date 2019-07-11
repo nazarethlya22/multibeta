@@ -1,6 +1,5 @@
 from pyrogram import Filters, Message
 import subprocess
-import asyncio
 import os
 import sys
 
