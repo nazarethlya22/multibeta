@@ -1,9 +1,7 @@
 import requests
-
 from pyrogram import Filters, Message
 
 from merchant import BOT
-
 
 text = '''
 **Username:** {username}

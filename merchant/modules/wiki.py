@@ -1,9 +1,8 @@
+from mediawiki import MediaWiki
 from pyrogram import Filters, Message
 
 from merchant import BOT
 from merchant.helpers import ReplyCheck
-
-from mediawiki import MediaWiki
 
 supported_langs = ['en', 'et', 'fr', 'nl', 'se', 'cz', 'it', 'ru', 'lv', 'lt', 'fi', 'de', 'pl', 'pt', 'es']
 

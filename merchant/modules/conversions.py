@@ -1,5 +1,5 @@
-import os
 import asyncio
+import os
 import subprocess
 
 from pyrogram import Filters, Message
@@ -55,7 +55,7 @@ async def convert_webm(bot: BOT, message: Message):
         message.continue_propagation()
 
 
-@BOT.on_message(Filters.command('mp3', '/') & Filters.reply)
+@BOT.on_message(Filters.command(commands=['mp3', 'mp3@videomerchantbot'], prefix='/') & Filters.reply)
 async def mp3_convert(bot: BOT, message: Message):
     if 'mp3' in os.path.splitext(message.reply_to_message.audio.file_name)[-1].lower():
         await BOT.send_message(

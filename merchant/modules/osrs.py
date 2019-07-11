@@ -1,9 +1,8 @@
+from mediawiki import MediaWiki
 from pyrogram import Filters, Message
 
 from merchant import BOT
 from merchant.helpers import ReplyCheck
-
-from mediawiki import MediaWiki
 
 osrs = MediaWiki(url='https://oldschool.runescape.wiki/api.php')
 

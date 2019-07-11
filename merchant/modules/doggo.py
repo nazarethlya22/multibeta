@@ -1,7 +1,7 @@
-import requests
-from random import randint
 import re
+from random import randint
 
+import requests
 from pyrogram import Filters, Message
 
 from merchant import BOT

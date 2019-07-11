@@ -1,13 +1,13 @@
-import youtube_dl
 import asyncio
-from pyrogram import Filters, Message
-from urllib.parse import urlsplit
 import os
 import re
+from urllib.parse import urlsplit
+
+import youtube_dl
+from pyrogram import Filters, Message
 
 from merchant import BOT, db, executor, LOGS
 from merchant.helpers import ReplyCheck
-
 
 urlregex = re.compile(r'(?P<url>https?://[^\s]+)')
 allowed_sites = ['youtu.be', 'youtube.com', 'soundcloud.com', 'i.4cdn.org', 'invidio.us', 'hooktube.com', '4cdn.com']
@@ -67,6 +67,7 @@ async def link_handler(link, cmd, site, message: Message):
                 )
 
                 data = executor.submit(get_yt_audio, link, data, 'mp3')
+                asyncio.subprocess.
                 while data.done() is False:
                     await asyncio.sleep(1)
                 return data.result(), 'audio', key
@@ -467,7 +468,7 @@ async def message_handler(bot: BOT, message: Message):
     await handler(bot, message, link)
 
 
-@BOT.on_message(Filters.command(commands=['get', 'audio', 'mp3']) & Filters.reply & ~Filters.edited)
+@BOT.on_message((Filters.command(commands=['get', 'audio', 'mp3']) | Filters.command(commands=['get', 'audio', 'mp3', 'mp3@videomerchantbot', 'get@videomerchantbot', 'audio@videomerchantbot'], prefix='/')) & Filters.reply & ~Filters.edited)
 async def ytdl_reply(bot: BOT, message: Message):
     if urlregex.match(message.reply_to_message.text):
         link = urlregex.search(message.reply_to_message.text).group('url')

@@ -1,9 +1,10 @@
-from pyrogram import Filters, Message
-import subprocess
 import os
+import subprocess
 import sys
 
-from merchant import BOT, ADMINS
+from pyrogram import Filters, Message
+
+from merchant import BOT, ADMINS, loop
 
 
 @BOT.on_message(Filters.user(users=ADMINS) & Filters.command('update', '!'))
@@ -22,6 +23,9 @@ async def up(bot: BOT, message: Message):
     message.reply("I am alive master")
 
 
-@BOT.on_message(Filters.command('uptime', '!'))
-async def uptime(bot:  BOT, message: Message):
-    pass
+@BOT.on_message(Filters.command('ping', '!'))
+async def ping(bot:  BOT, message: Message):
+    ip = message.command[2]
+    data = loop.subprocess_exec(['ping', ip , '-c', '4'], stdout=subprocess.PIPE)
+    result = data.result().stdout
+    message.reply(result)

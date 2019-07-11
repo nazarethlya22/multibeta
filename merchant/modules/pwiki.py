@@ -1,10 +1,8 @@
 import requests
-
 from pyrogram import Filters, Message
 
 from merchant import BOT
 from merchant.helpers import ReplyCheck
-
 
 query = """
 query get_data($substance_name: String) {
