@@ -17,7 +17,6 @@ def site_allowed(link):
     for allowed_site in allowed_sites:
         if allowed_site in link:
             return allowed_site
-
     else:
         return None
 
@@ -33,7 +32,7 @@ def get_cmds(cmd):
         return None
 
 
-def getData(url):
+def get_data(url):
     ydl_opts = {
         'noplaylist': True,
     }
@@ -43,7 +42,7 @@ def getData(url):
 
 
 async def link_handler(link, cmd, site, message: Message):
-    data = getData(link)
+    data = get_data(link)
     await BOT.send_chat_action(
         chat_id=message.chat.id,
         action='upload_document'
@@ -260,7 +259,6 @@ def get_yt_audio(url, data=None, codec='opus'):
         ydl.download([url])
         filename = ydl.prepare_filename(data)
         filename = os.path.splitext(filename)[0] + '.' + codec
-
         return [filename, data]
 
 
@@ -304,7 +302,6 @@ def get_video(url, data=None):
         ydl.download([url])
         filename = ydl.prepare_filename(data)
         filename = os.path.splitext(filename)[0] + '.mp4'
-
         return [filename, data]
 
 
@@ -327,7 +324,6 @@ def get_audio(url, data=None, codec='mp3'):
         ydl.download([url])
         filename = ydl.prepare_filename(data)
         filename = os.path.splitext(filename)[0] + '.' + codec
-
         return [filename, data]
 
 
