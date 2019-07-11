@@ -5,7 +5,7 @@ from merchant.helpers import ReplyCheck
 
 from mediawiki import MediaWiki
 
-supported_langs = ['en', 'et', 'fr', 'nl', 'se', 'cz', 'it', 'ru', 'lv', 'lt', 'fi', 'de', 'pl']
+supported_langs = ['en', 'et', 'fr', 'nl', 'se', 'cz', 'it', 'ru', 'lv', 'lt', 'fi', 'de', 'pl', 'pt', 'es']
 
 
 def wikipedia_summary(topic, lang='en'):
@@ -18,14 +18,14 @@ def wikipedia_summary(topic, lang='en'):
 
 @BOT.on_message(Filters.command("wiki", "/") & ~Filters.edited)
 async def wiki(bot: BOT, message: Message):
-    topic = message.text.replace("/wiki ", "")
-    for lang in supported_langs:
-        if lang in message.command[1].lower():
-            topic = ' '.join(message.command[2:])
-            lang = lang
-            break
+    if len(message.command[1]) == 2:
+        for lang in supported_langs:
+            if lang in message.command[1].lower():
+                topic = ' '.join(message.command[2:])
+                lang = lang
+                break
     else:
-        topic = ' '.join(message.command[1:],    )
+        topic = ' '.join(message.command[1:])
 
     summary = wikipedia_summary(topic, lang)
 
