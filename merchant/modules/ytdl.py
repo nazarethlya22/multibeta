@@ -64,8 +64,12 @@ async def link_handler(link, cmd, site, message: Message):
         if 'mp3' in cmd:
             ext = 'audio'
 
-    if value is not None and 'mp3' not in cmd:
-        return [value.decode(), data], ext, key
+    try:
+        if value:
+            if 'mp3' not in cmd:
+                return [value.decode(), data], ext, key
+    except TypeError:
+        pass
 
     if cmd:
         try:

@@ -20,9 +20,9 @@ def get_kot(mime_types):
         return url
 
 
-@BOT.on_message(Filters.regex("(?i)(post|get|send) (kot|kots|cat|cats|🐱|🐈|😸|🐱) (gif|gifs)"))
+@BOT.on_message(Filters.regex("(?i)(post|get|send) (kot|kitten|kots|cat|cats|🐱|🐈|😸|🐱) (gif|gifs)"))
 async def post_kot_gif(bot: BOT, message: Message):
-    if re.match("(?i)(post|get|send) (kot|kots|cat|cats|🐱|🐈|😸|🐱) (gif|gifs)", message.text):
+    if re.match("(?i)(post|get|send) (kot|kitten|kots|cat|cats|🐱|🐈|😸|🐱) (gif|gifs)", message.text):
         kot_gif = get_kot(mime_types="gif")
         await BOT.send_animation(
             chat_id=message.chat.id,
@@ -32,9 +32,9 @@ async def post_kot_gif(bot: BOT, message: Message):
         )
 
 
-@BOT.on_message(Filters.regex("(?i)(post|get|send) (kot|kots|cat|cats|🐱|🐈|😸|🐱)"))
+@BOT.on_message(Filters.regex("(?i)(post|get|send) (kot|kitten|kots|cat|cats|🐱|🐈|😸|🐱)"))
 async def post_kot(bot: BOT, message: Message):
-    if re.match("(?i)(post|get|send) (kot|kots|cat|cats|🐱|🐈|😸|🐱)", message.text):
+    if re.match("(?i)(post|get|send) (kot|kitten|kots|cat|cats|🐱|🐈|😸|🐱)", message.text):
         kot_link = get_kot(mime_types="jpg,png")
         await BOT.send_photo(
             chat_id=message.chat.id,
