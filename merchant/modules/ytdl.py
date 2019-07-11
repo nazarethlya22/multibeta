@@ -352,9 +352,7 @@ def clean_cache(location: str, thumbnail: str):
         LOGS.warning(e)
 
 
-@BOT.on_message(Filters.regex(r'(?P<url>https?://[^\s]+)') & ~Filters.edited)
-async def message_handler(bot: BOT, message: Message):
-    link = urlregex.search(message.text).group('url')
+async def handler(bot: BOT, message: Message, link: str):
     cmd = get_cmds(message.text.lower().split(' ')[0])
     site = site_allowed(link)
 
@@ -425,7 +423,7 @@ async def message_handler(bot: BOT, message: Message):
                     caption=link,
                     disable_notification=True
                 )
-                
+
             elif 'video' in ext:
                 await BOT.send_chat_action(
                     chat_id=message.chat.id,
@@ -462,7 +460,7 @@ async def message_handler(bot: BOT, message: Message):
                     )
                 except AttributeError:
                     db.set(key, o.animation.file_id)
-                    
+
                     await BOT.send_animation(
                         chat_id=-1001496485217,
                         animation=o.animation.file_id,
@@ -471,133 +469,21 @@ async def message_handler(bot: BOT, message: Message):
                     )
 
                 clean_cache(file_location, thumbnail)
-    
+
     else:
         message.continue_propagation()
 
 
-@BOT.on_message(Filters.command(prefix=['get', 'audio', 'mp3']) & Filters.reply)
+@BOT.on_message(Filters.regex(r'(?P<url>https?://[^\s]+)') & ~Filters.edited)
+async def message_handler(bot: BOT, message: Message):
+    link = urlregex.search(message.text).group('url')
+    await handler(bot, message, link)
+
+
+@BOT.on_message(Filters.command(prefix=['get', 'audio', 'mp3']) & Filters.reply & ~Filters.edited)
 async def ytdl_reply(bot: BOT, message: Message):
     if urlregex.match(message.reply_to_message.text):
         link = urlregex.search(message.reply_to_message.text).group('url')
-        cmd = get_cmds(message.text.lower().split(' ')[0])
-        site = site_allowed(link)
-
-        if cmd or site:
-            if cmd:
-                data, ext, key = await link_handler(link, cmd, site, message)
-
-            elif site:
-                data, ext, key = await link_handler(link, cmd, site, message)
-
-            file_location = data[0]
-
-            if file_location:
-                metadata = data[1]
-                thumbnail = os.path.splitext(file_location)[0] + '.jpg'
-
-                try:
-                    if os.path.getsize(thumbnail) > 200 * 1024:
-                        thumbnail = None
-
-                except FileNotFoundError:
-                    thumbnail = None
-
-                if 'audio' in ext:
-                    try:
-                        if metadata['alt_title']:
-                            title = metadata['alt_title']
-                        else:
-                            title = metadata['title']
-
-                    except KeyError as e:
-                        LOGS.warn(e)
-                        title = ''
-
-                    await BOT.send_chat_action(
-                        chat_id=message.chat.id,
-                        action='upload_audio'
-                    )
-
-                    try:
-                        o = await BOT.send_audio(
-                            chat_id=message.chat.id,
-                            audio=file_location,
-                            performer=metadata['creator'],
-                            duration=metadata['duration'],
-                            title=title,
-                            thumb=thumbnail,
-                            disable_notification=True,
-                            reply_to_message_id=message.message_id
-                        )
-
-                    except KeyError as e:
-                        LOGS.warn(e)
-                        o = await BOT.send_audio(
-                            chat_id=message.chat.id,
-                            audio=file_location,
-                            disable_notification=True,
-                            reply_to_message_id=message.message_id
-                        )
-
-                    if 'mp3' not in ext:
-                        db.set(key, o.audio.file_id)
-                    clean_cache(file_location, thumbnail)
-
-                    await BOT.send_audio(
-                        chat_id=-1001496485217,
-                        audio=o.audio.file_id,
-                        caption=link,
-                        disable_notification=True
-                    )
-
-                elif 'video' in ext:
-                    await BOT.send_chat_action(
-                        chat_id=message.chat.id,
-                        action='upload_video'
-                    )
-
-                    try:
-                        o = await BOT.send_video(
-                            chat_id=message.chat.id,
-                            video=file_location,
-                            duration=metadata['duration'],
-                            disable_notification=True,
-                            thumb=thumbnail,
-                            reply_to_message_id=message.message_id
-                        )
-
-                    except KeyError as e:
-                        LOGS.warn(e)
-
-                        o = await BOT.send_video(
-                            chat_id=message.chat.id,
-                            video=file_location,
-                            disable_notification=True,
-                            reply_to_message_id=message.message_id
-                        )
-                    try:
-                        db.set(key, o.video.file_id)
-
-                        await BOT.send_video(
-                            chat_id=-1001496485217,
-                            video=o.video.file_id,
-                            caption=link,
-                            disable_notification=True
-                        )
-                    except AttributeError:
-                        db.set(key, o.animation.file_id)
-
-                        await BOT.send_animation(
-                            chat_id=-1001496485217,
-                            animation=o.animation.file_id,
-                            caption=link,
-                            disable_notification=True,
-                            reply_to_message_id=message.message_id
-                        )
-
-                    clean_cache(file_location, thumbnail)
-
-        else:
-            message.continue_propagation()
-            
+        await handler(bot, message, link)
+    else:
+        message.continue_propagation()
