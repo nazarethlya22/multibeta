@@ -4,7 +4,6 @@ import os
 from pyrogram import Filters, Message
 
 from merchant import BOT, LOGS
-from merchant.helpers import ReplyCheck
 
 
 @BOT.on_message(Filters.document & ~Filters.edited)
@@ -30,7 +29,6 @@ async def convert_webm(bot: BOT, message: Message):
             chat_id=message.chat.id,
             video=video,
             disable_notification=True,
-            reply_to_message_id=ReplyCheck(message)
         )
 
         await BOT.send_video(
@@ -86,7 +84,6 @@ async def mp3_convert(bot: BOT, message: Message):
                 chat_id=message.chat.id,
                 audio=audio,
                 disable_notification=True,
-                reply_to_message_id=ReplyCheck(message)
             )
 
             await BOT.send_audio(
