@@ -166,6 +166,4 @@ async def mp3_convert(bot: BOT, message: Message):
 
             os.remove(filename)
             os.remove(audio)
-
-    else:
-        await message.reply('Can\'t convert this file')
+            
