@@ -34,12 +34,12 @@ async def ping(bot:  BOT, message: Message):
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE
     )
-    
+
     stdout, stderr = await proc.communicate()
     stdout = stdout.decode()
     stderr = stderr.decode()
 
     if stdout:
-        message.reply(stdout)
+        await message.reply(stdout)
     elif stderr:
-        message.reply(stderr)
+        await message.reply(stderr)
