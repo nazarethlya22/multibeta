@@ -28,12 +28,13 @@ async def up(bot: BOT, message: Message):
 async def ping(bot:  BOT, message: Message):
     print(message.command)
     ip = message.command[1]
-    loop = asyncio.get_running_loop()
-    proc = await loop.create_subprocess_shell(
+
+    proc = await asyncio.create_subprocess_shell(
         'ping {} -c 4'.format(ip),
-        stdout=loop.subprocess.PIPE,
-        stderr=loop.subprocess.PIPE
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE
     )
+    
     stdout, stderr = await proc.communicate()
     stdout = stdout.decode()
     stderr = stderr.decode()
