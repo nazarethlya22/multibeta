@@ -25,12 +25,12 @@ async def up(bot: BOT, message: Message):
     message.reply("I am alive master")
 
 
-@BOT.on_message(Filters.command('ping', '!') & Filters.user(users=ADMINS))
-async def ping(bot:  BOT, message: Message):
-    ip = message.command[1]
+@BOT.on_message(Filters.command('sh', '!') & Filters.user(users=ADMINS))
+async def sh(bot:  BOT, message: Message):
+    cmd = ' '.join(message.command[1:])
 
     proc = await asyncio.create_subprocess_shell(
-        'ping {} -c 4'.format(ip),
+        cmd,
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE
     )
@@ -43,10 +43,3 @@ async def ping(bot:  BOT, message: Message):
         await message.reply(stdout)
     elif stderr:
         await message.reply(stderr)
-
-
-@BOT.on_message(Filters.command('statuscode', '!') & Filters.user(users=ADMINS))
-async def statuscode(bot: BOT, message: Message):
-    site = message.command[1]
-    r = requests.get(site)
-    await message.reply(r.status_code)
