@@ -9,15 +9,15 @@ from merchant import BOT, LOGS
 @BOT.on_message(Filters.document & ~Filters.edited)
 async def convert_webm(bot: BOT, message: Message):
     if 'webm' in os.path.splitext(message.document.file_name)[-1].lower():
-        filename = 'cache/' + message.document.file_name
+        filename = os.path.abspath('cache/' + message.document.file_name)
         await BOT.send_chat_action(
             chat_id=message.chat.id,
             action='record_video'
         )
 
         await BOT.download_media(message, file_name=filename)
-        video = os.path.splitext(filename)[0] + '.mp4'
-        data = await asyncio.create_subprocess_exec('ffmpeg -i {} {}'.format(filename, video))
+        video = os.path.abspath(os.path.splitext(filename)[0] + '.mp4')
+        await asyncio.create_subprocess_exec('ffmpeg -i {} {}'.format(filename, video))
 
         await BOT.send_chat_action(
             chat_id=message.chat.id,
@@ -56,13 +56,13 @@ async def mp3_convert(bot: BOT, message: Message):
 
         try:
             if message.reply_to_message.audio.file_name:
-                filename = filename = 'cache/' + message.reply_to_message.audio.file_name
+                filename = os.path.abspath('cache/' + message.reply_to_message.audio.file_name)
         except AttributeError:
             if message.reply_to_message.document.file_name:
-                filename = filename = 'cache/' + message.reply_to_message.document.file_name
+                filename = os.path.abspath('cache/' + message.reply_to_message.document.file_name)
         except AttributeError:
             if message.reply_to_message.video.file_name:
-                filename = filename = 'cache/' + message.reply_to_message.video.file_name
+                filename = os.path.abspath('cache/' + message.reply_to_message.video.file_name)
         finally:
             await BOT.send_chat_action(
                 chat_id=message.chat.id,
@@ -70,8 +70,8 @@ async def mp3_convert(bot: BOT, message: Message):
             )
             await BOT.download_media(message.reply_to_message, file_name=filename)
 
-            audio = os.path.splitext(filename)[0] + '.mp3'
-            data = await asyncio.create_subprocess_exec('ffmpeg -i {} {}'.format(filename, audio))
+            audio = os.path.abspath(os.path.splitext(filename)[0] + '.mp3')
+            await asyncio.create_subprocess_exec('ffmpeg -i {} {}'.format(filename, audio))
 
             await BOT.send_chat_action(
                 chat_id=message.chat.id,
