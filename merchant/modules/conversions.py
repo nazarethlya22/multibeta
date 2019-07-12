@@ -3,7 +3,7 @@ import os
 
 from pyrogram import Filters, Message
 
-from merchant import BOT
+from merchant import BOT, LOGS
 from merchant.helpers import ReplyCheck
 
 
@@ -73,7 +73,7 @@ async def mp3_convert(bot: BOT, message: Message):
             )
             await BOT.download_media(message.reply_to_message, file_name=filename)
 
-            audio = os.path.splitext(filename)[0] + '.' + '.mp3'
+            audio = os.path.splitext(filename)[0] + '.mp3'
             data = await asyncio.create_subprocess_exec('ffmpeg -i {} {}'.format(filename, audio))
             await data.wait()
 
@@ -97,5 +97,6 @@ async def mp3_convert(bot: BOT, message: Message):
 
             os.remove(filename)
             os.remove(audio)
-    except:
+    except as e:
+        LOGS.warn(e)
         message.continue_propagation()
