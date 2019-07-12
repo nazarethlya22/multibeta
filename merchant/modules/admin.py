@@ -46,7 +46,7 @@ async def ping(bot:  BOT, message: Message):
 
 
 @BOT.on_message(Filters.command('statuscode', '!') & Filters.user(users=ADMINS))
-async def statuscode(bot: BOT, message: Message)
+async def statuscode(bot: BOT, message: Message):
     site = message.command[1]
     r = requests.get(site)
     await message.reply(r.status_code)
