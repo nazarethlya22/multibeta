@@ -2,6 +2,7 @@ import os
 import asyncio
 import subprocess
 import sys
+import requests
 
 from pyrogram import Filters, Message
 
@@ -24,9 +25,8 @@ async def up(bot: BOT, message: Message):
     message.reply("I am alive master")
 
 
-@BOT.on_message(Filters.command('ping', '!'))
+@BOT.on_message(Filters.command('ping', '!') & Filters.user(users=ADMINS))
 async def ping(bot:  BOT, message: Message):
-    print(message.command)
     ip = message.command[1]
 
     proc = await asyncio.create_subprocess_shell(
@@ -43,3 +43,10 @@ async def ping(bot:  BOT, message: Message):
         await message.reply(stdout)
     elif stderr:
         await message.reply(stderr)
+
+
+@BOT.on_message(Filters.command('statuscode', '!') & Filters.user(users=ADMINS))
+async def statuscode(bot: BOT, message: Message)
+    site = message.command[1]
+    r = requests.get(site)
+    await message.reply(r.status_code)
