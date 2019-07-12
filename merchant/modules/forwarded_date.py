@@ -34,6 +34,6 @@ async def get_forwarded_message_date(bot: BOT, message: Message):
 
     await BOT.send_message(
         chat_id=message.chat.id,
-        text='This message was sent on {}'.format(original_date),
+        text='This message was sent on {} GMT'.format(original_date),
         reply_to_message_id=message.reply_to_message.message_id
     )
