@@ -65,7 +65,7 @@ async def link_handler(link, cmd, site, message: Message):
                     chat_id=message.chat.id,
                     action='record_audio'
                 )
-
+                asyncio.
                 data = executor.submit(get_yt_audio, link, data, 'mp3')
                 while data.done() is False:
                     await asyncio.sleep(1)
