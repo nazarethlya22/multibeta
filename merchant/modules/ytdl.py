@@ -456,7 +456,6 @@ async def handler(bot: BOT, message: Message, link: str):
                     )
 
                 clean_cache(file_location, thumbnail)
-
     else:
         message.continue_propagation()
 

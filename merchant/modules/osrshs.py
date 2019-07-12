@@ -74,7 +74,7 @@ def osrshs(username):
         return "User {} was not found".format(username)
 
 
-@BOT.on_message(Filters.command('osstats', '/') & ~Filters.edited)
+@BOT.on_message(Filters.command(commands='osstats', prefix='/') & ~Filters.edited)
 async def osrs_highscores(bot: BOT, message: Message):
     username = message.text.replace("/osstats ", "")
     stats = osrshs(username)

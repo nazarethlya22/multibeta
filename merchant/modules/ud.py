@@ -44,8 +44,8 @@ def define_word_ud(word):
 
 @BOT.on_message(Filters.command("ud", "/") & ~Filters.edited)
 async def post_ud(bot: BOT, message: Message):
-    message_text = message.text.replace("/ud ", "")
-    text = define_word_ud(message_text)
+    topic = ' '.join(message.command[1:])
+    text = define_word_ud(topic)
     await BOT.send_message(
         chat_id=message.chat.id,
         text=text[:4096],
