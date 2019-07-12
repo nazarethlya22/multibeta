@@ -62,6 +62,3 @@ db = Walrus(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 
 # Setup executor
 executor = concurrent.futures.ProcessPoolExecutor(max_workers=MAXIMUM_WORKERS)
-
-# get loop
-loop = asyncio.get_event_loop()

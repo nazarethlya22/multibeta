@@ -3,7 +3,7 @@ import importlib
 import asyncio  
 
 from merchant.modules import ALL_MODULES
-from merchant import BOT, LOGS
+from merchant import BOT
 
 
 # Load modules
