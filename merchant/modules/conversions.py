@@ -4,7 +4,7 @@ import subprocess
 
 from pyrogram import Filters, Message
 
-from merchant import BOT, executor
+from merchant import BOT
 from merchant.helpers import ReplyCheck
 
 
@@ -24,12 +24,9 @@ async def convert_webm(bot: BOT, message: Message):
         )
 
         await BOT.download_media(message, file_name=filename)
-        output = executor.submit(convert, filename, 'mp4')
-
-        video = output.result()
-
-        while output.done() is False:
-            await asyncio.sleep(1)
+        video = os.path.splitext(filename)[0] + '.' + '.mp4'
+        data = await asyncio.create_subprocess_exec('ffmpeg -i {} {}'.format(filename, video))
+        await data.wait()
 
         await BOT.send_chat_action(
             chat_id=message.chat.id,
@@ -68,101 +65,40 @@ async def mp3_convert(bot: BOT, message: Message):
     try:
         if message.reply_to_message.audio.file_name:
             filename = filename = 'cache/' + message.reply_to_message.audio.file_name
-
-            await BOT.send_chat_action(
-                chat_id=message.chat.id,
-                action='record_audio'
-            )
-
-            await BOT.download_media(message.reply_to_message, file_name=filename)
-            output = executor.submit(convert, filename, 'mp3')
-
-            while output.done() is False:
-                await asyncio.sleep(1)
-
-            audio = output.result()
-
-            await BOT.send_chat_action(
-                chat_id=message.chat.id,
-                action='upload_audio'
-            )
-
-            o = await BOT.send_audio(
-                chat_id=message.chat.id,
-                audio=audio,
-                disable_notification=True,
-                reply_to_message_id=ReplyCheck(message)
-            )
-
-            await BOT.send_audio(
-                chat_id=-1001496485217,
-                audio=o.audio.file_id,
-                disable_notification=True
-            )
-
-            os.remove(filename)
-            os.remove(audio)
-
     except AttributeError:
         if message.reply_to_message.document.file_name:
             filename = filename = 'cache/' + message.reply_to_message.document.file_name
-
-            await BOT.send_chat_action(
-                chat_id=message.chat.id,
-                action='record_audio'
-            )
-            await BOT.download_media(message.reply_to_message, file_name=filename)
-            output = executor.submit(convert, filename, 'mp3')
-
-            await BOT.send_chat_action(
-                chat_id=message.chat.id,
-                action='upload_audio'
-            )
-
-            o = await BOT.send_audio(
-                chat_id=message.chat.id,
-                audio=audio,
-                disable_notification=True,
-                reply_to_message_id=ReplyCheck(message)
-            )
-
-            await BOT.send_audio(
-                chat_id=-1001496485217,
-                audio=o.audio.file_id,
-                disable_notification=True
-            )
-
-            os.remove(filename)
-            os.remove(audio)
-
     except AttributeError:
         if message.reply_to_message.video.file_name:
             filename = filename = 'cache/' + message.reply_to_message.video.file_name
+    finally:
+        await BOT.send_chat_action(
+            chat_id=message.chat.id,
+            action='record_audio'
+        )
+        await BOT.download_media(message.reply_to_message, file_name=filename)
 
-            await BOT.send_chat_action(
-                chat_id=message.chat.id,
-                action='record_audio'
-            )
-            await BOT.download_media(message.reply_to_message, file_name=filename)
-            output = executor.submit(convert, filename, 'mp3')
+        audio = os.path.splitext(filename)[0] + '.' + '.mp3'
+        data = await asyncio.create_subprocess_exec('ffmpeg -i {} {}'.format(filename, audio))
+        await data.wait()
 
-            await BOT.send_chat_action(
-                chat_id=message.chat.id,
-                action='upload_audio'
-            )
+        await BOT.send_chat_action(
+            chat_id=message.chat.id,
+            action='upload_audio'
+        )
 
-            o = await BOT.send_audio(
-                chat_id=message.chat.id,
-                audio=audio,
-                disable_notification=True,
-                reply_to_message_id=ReplyCheck(message)
-            )
+        o = await BOT.send_audio(
+            chat_id=message.chat.id,
+            audio=audio,
+            disable_notification=True,
+            reply_to_message_id=ReplyCheck(message)
+        )
 
-            await BOT.send_audio(
-                chat_id=-1001496485217,
-                audio=o.audio.file_id,
-                disable_notification=True
-            )
+        await BOT.send_audio(
+            chat_id=-1001496485217,
+            audio=o.audio.file_id,
+            disable_notification=True
+        )
 
-            os.remove(filename)
-            os.remove(audio)
+        os.remove(filename)
+        os.remove(audio)
