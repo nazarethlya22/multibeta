@@ -23,6 +23,10 @@ async def wiki(bot: BOT, message: Message):
                 topic = ' '.join(message.command[2:])
                 lang = lang
                 break
+        else:
+            topic = ' '.join(message.command[1:])
+            lang = 'en'
+
     else:
         topic = ' '.join(message.command[1:])
         lang = 'en'
