@@ -6,7 +6,7 @@ from urllib.parse import urlsplit
 import youtube_dl
 from pyrogram import Filters, Message
 
-from merchant import BOT, db, executor, LOGS
+from merchant import BOT, db, executor, LOGS, YT_USERNAME, YT_PASSWORD
 from merchant.helpers import ReplyCheck
 
 urlregex = re.compile(r'(?P<url>https?://[^\s]+)')
@@ -240,6 +240,8 @@ def generate_key(link, cmd, data):
 def get_yt_audio(url, data=None, codec='opus'):
     opus_opts = {
         'format': 'bestaudio',
+        'username': YT_USERNAME,
+        'password': YT_PASSWORD,
         'outtmpl': 'cache/audio/%(title)s.%(ext)s',
         'noplaylist': True,
         'restrictfilenames': True,
@@ -265,6 +267,8 @@ def get_yt_audio(url, data=None, codec='opus'):
 def get_yt_video(url, data=None):
     ydl_opts = {
         'format': 'best[ext=mp4]',
+        'username': YT_USERNAME,
+        'password': YT_PASSWORD,
         'outtmpl': 'cache/video/%(id)s.%(ext)s',
         'noplaylist': True,
         'youtube_include_dash_manifest': False,

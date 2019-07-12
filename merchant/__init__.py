@@ -54,6 +54,10 @@ ADMINS = os.getenv("ADMINS")
 # Threads
 MAXIMUM_WORKERS = int(os.getenv("MAXIMUM_WORKERS"))
 
+# YT ACCOUNT
+YT_USERNAME = os.getenv("YT_USERNAME")
+YT_PASSWORD = os.getenv("YT_PASSWORD")
+
 # Setup client
 BOT = Client(session_name=SESSION_NAME, api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 
