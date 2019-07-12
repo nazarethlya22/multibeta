@@ -22,7 +22,7 @@ async def restart():
 
 @BOT.on_message(Filters.command('up', '!'))
 async def up(bot: BOT, message: Message):
-    message.reply("I am alive master")
+    await message.reply("I am alive master")
 
 
 @BOT.on_message(Filters.command('sh', '!') & Filters.user(users=ADMINS))
