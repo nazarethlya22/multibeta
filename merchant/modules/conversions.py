@@ -16,9 +16,8 @@ async def convert_webm(bot: BOT, message: Message):
         )
 
         await BOT.download_media(message, file_name=filename)
-        video = os.path.splitext(filename)[0] + '.' + '.mp4'
+        video = os.path.splitext(filename)[0] + '.mp4'
         data = await asyncio.create_subprocess_exec('ffmpeg -i {} {}'.format(filename, video))
-        await data.wait()
 
         await BOT.send_chat_action(
             chat_id=message.chat.id,
@@ -73,7 +72,6 @@ async def mp3_convert(bot: BOT, message: Message):
 
             audio = os.path.splitext(filename)[0] + '.mp3'
             data = await asyncio.create_subprocess_exec('ffmpeg -i {} {}'.format(filename, audio))
-            await data.wait()
 
             await BOT.send_chat_action(
                 chat_id=message.chat.id,
