@@ -28,6 +28,7 @@ async def up(bot: BOT, message: Message):
 @BOT.on_message(Filters.command('sh', '!') & Filters.user(users=ADMINS))
 async def sh(bot:  BOT, message: Message):
     cmd = ' '.join(message.command[1:])
+    print(cmd)
 
     proc = await asyncio.create_subprocess_shell(
         cmd,
