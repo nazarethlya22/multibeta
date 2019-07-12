@@ -4,7 +4,7 @@ from pyrogram import Filters, Message
 from merchant import BOT
 from merchant.helpers import ReplyCheck
 
-supported_langs = ['en', 'et', 'fr', 'nl', 'sv', 'da', 'la', 'mt', 'ro', 'sl', 'sk', 'cs', 'cz', 'it', 'ru', 'lv', 'lt', 'fi', 'de', 'pl', 'pt', 'es', 'no', '']
+supported_langs = ['en', 'et', 'fr', 'nl', 'sv', 'da', 'la', 'mt', 'ro', 'sl', 'sk', 'cs', 'cz', 'it', 'ru', 'lv', 'lt', 'fi', 'de', 'pl', 'pt', 'es', 'no', 'ta']
 
 
 def wikipedia_summary(topic, lang='en'):
