@@ -7,8 +7,6 @@ from pyrogram import Filters, Message
 
 from merchant import BOT, ADMINS
 
-loop = asyncio.get_running_loop()
-
 
 @BOT.on_message(Filters.user(users=ADMINS) & Filters.command('update', '!'))
 async def pull_update():
@@ -30,6 +28,7 @@ async def up(bot: BOT, message: Message):
 async def ping(bot:  BOT, message: Message):
     print(message.command)
     ip = message.command[1]
+    loop = asyncio.get_running_loop()
     proc = await loop.create_subprocess_shell(
         'ping {} -c 4'.format(ip),
         stdout=loop.subprocess.PIPE,
