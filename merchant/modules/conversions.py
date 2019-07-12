@@ -97,6 +97,6 @@ async def mp3_convert(bot: BOT, message: Message):
 
             os.remove(filename)
             os.remove(audio)
-    except as e:
+    except Exception as e:
         LOGS.warn(e)
         message.continue_propagation()
