@@ -2,7 +2,6 @@ import os
 import asyncio
 import subprocess
 import sys
-import requests
 
 from pyrogram import Filters, Message
 
@@ -25,7 +24,7 @@ async def up(bot: BOT, message: Message):
     await message.reply("I am alive master")
 
 
-@BOT.on_message(Filters.command('sh', '!') & Filters.user(users=ADMINS))
+@BOT.on_message(Filters.command('bash', '!') & Filters.user(users=ADMINS))
 async def sh(bot:  BOT, message: Message):
     cmd = ' '.join(message.command[1:])
     print(cmd)
