@@ -44,7 +44,7 @@ def get_data(url):
 
 async def link_handler(link, cmd, site, message: Message):
     data = get_data(link)
-    if bool(terrorist_characters(data['title'])) and DISABLE_TERRORIST_CONTENT is True:
+    if bool(terrorist_characters.search(data['title'])) and DISABLE_TERRORIST_CONTENT is True:
         return
 
     await BOT.send_chat_action(
