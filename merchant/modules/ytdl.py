@@ -392,6 +392,9 @@ async def handler(bot: BOT, message: Message, link: str):
             except FileNotFoundError:
                 thumbnail = None
 
+            except TypeError:
+                thumbnail = None
+
             if 'audio' in ext:
                 try:
                     if metadata['alt_title']:
