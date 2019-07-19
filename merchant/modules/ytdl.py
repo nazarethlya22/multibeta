@@ -11,7 +11,7 @@ from merchant.helpers import ReplyCheck
 
 urlregex = re.compile(r'(?P<url>https?://[^\s]+)')
 allowed_sites = ['youtu.be', 'youtube.com', 'soundcloud.com', 'i.4cdn.org', 'invidio.us', 'hooktube.com', '4cdn.com']
-terrorist_characters = re.compile('[\u0627-\u064a]')
+terrorist_characters = re.compile('[ا-ي]')
 
 
 def site_allowed(link):
@@ -44,7 +44,7 @@ def get_data(url):
 
 async def link_handler(link, cmd, site, message: Message):
     data = get_data(link)
-    if terrorist_characters.search(data['title']) & DISABLE_TERRORIST_CONTENT is True:
+    if terrorist_characters.search(data['title']) is not None & DISABLE_TERRORIST_CONTENT is True:
         message.reply("Arabic content has been disabled by the bot")
     else:
         await BOT.send_chat_action(
