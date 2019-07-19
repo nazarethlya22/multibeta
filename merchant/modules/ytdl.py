@@ -65,7 +65,7 @@ async def link_handler(link, cmd, site, message: Message):
                 )
 
                 if value:
-                    return [data, value.decode()], 'audio', key
+                    return [value.decode(), data], 'audio', key
                 else:
                     data = executor.submit(get_yt_audio, link, data, 'mp3')
                     while data.done() is False:
@@ -78,7 +78,7 @@ async def link_handler(link, cmd, site, message: Message):
                     action='record_audio'
                 )
                 if value:
-                    return [data, value.decode()], 'audio', key
+                    return [value.decode(), data], 'audio', key
                 else:
                     data = executor.submit(get_yt_audio, link, data)
 
@@ -92,7 +92,7 @@ async def link_handler(link, cmd, site, message: Message):
                     action='record_video'
                 )
                 if value:
-                    return [data, value.decode()], 'video', key
+                    return [value.decode(), data], 'video', key
 
                 else:
                     data = executor.submit(get_yt_video, link, data)
@@ -111,7 +111,7 @@ async def link_handler(link, cmd, site, message: Message):
                 )
 
                 if value:
-                    return [data, value.decode()], 'audio', key
+                    return [value.decode(), data], 'audio', key
                 else:
                     data = executor.submit(get_audio, link, data)
                     while data.done() is False:
@@ -125,7 +125,7 @@ async def link_handler(link, cmd, site, message: Message):
                 )
 
                 if value:
-                    return [data, value.decode()], 'video', key
+                    return [value.decode(), data], 'video', key
                 else:
                     data = executor.submit(get_video, link, data)
                     while data.done() is False:
@@ -140,7 +140,7 @@ async def link_handler(link, cmd, site, message: Message):
             )
 
             if value:
-                return [data, value.decode()], 'audio', key
+                return [value.decode(), data], 'audio', key
             else:
                 data = executor.submit(get_yt_audio, link, data)
                 while data.done() is False:
@@ -154,7 +154,7 @@ async def link_handler(link, cmd, site, message: Message):
             )
 
             if value:
-                return [data, value.decode()], 'audio', key
+                return [value.decode(), data], 'audio', key
             else:
                 data = executor.submit(get_yt_video, link, data)
                 while data.done() is False:
@@ -168,7 +168,7 @@ async def link_handler(link, cmd, site, message: Message):
             )
 
             if value:
-                return [data, value.decode()], 'video', key
+                return [value.decode(), data], 'video', key
             else:
                 data = executor.submit(get_yt_video, link, data)
                 while data.done() is False:
@@ -182,7 +182,7 @@ async def link_handler(link, cmd, site, message: Message):
             )
 
             if value:
-                return [data, value.decode()], 'audio', key
+                return [value.decode(), data], 'audio', key
             else:
                 data = executor.submit(get_video, link, data)
                 while data.done() is False:
@@ -386,6 +386,7 @@ async def handler(bot: BOT, message: Message, link: str):
 
             try:
                 thumbnail = os.path.splitext(file_location)[0] + '.jpg'
+
                 if os.path.getsize(thumbnail) > 200 * 1024:
                     thumbnail = None
 
