@@ -59,7 +59,7 @@ YT_USERNAME = os.getenv("YT_USERNAME")
 YT_PASSWORD = os.getenv("YT_PASSWORD")
 
 # Disable terrorist content
-DISABLE_TERRORIST_CONTENT = os.getenv("DISABLE_TERRORIST_CONTENT")
+DISABLE_TERRORIST_CONTENT = bool(os.getenv("DISABLE_TERRORIST_CONTENT"))
 
 # Setup client
 BOT = Client(session_name=SESSION_NAME, api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
