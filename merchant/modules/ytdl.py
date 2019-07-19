@@ -133,49 +133,50 @@ async def link_handler(link, cmd, site, message: Message):
                     return data.result(), 'video', key
 
     elif link:
-        if 'Music' in data['categories']:
-            await BOT.send_chat_action(
-                chat_id=message.chat.id,
-                action='record_audio'
-            )
+        try:
+            if 'Music' in data['categories']:
+                await BOT.send_chat_action(
+                    chat_id=message.chat.id,
+                    action='record_audio'
+                )
 
-            if value:
-                return [value.decode(), data], 'audio', key
-            else:
-                data = executor.submit(get_yt_audio, link, data)
-                while data.done() is False:
-                    await asyncio.sleep(1)
-                return data.result(), 'audio', key
+                if value:
+                    return [value.decode(), data], 'audio', key
+                else:
+                    data = executor.submit(get_yt_audio, link, data)
+                    while data.done() is False:
+                        await asyncio.sleep(1)
+                    return data.result(), 'audio', key
 
-        elif 'youtube' in site or 'hooktube' in site or 'invidio' in site or 'youtu.be' in site:
-            await BOT.send_chat_action(
-                chat_id=message.chat.id,
-                action='record_video'
-            )
+            elif 'youtube' in site or 'hooktube' in site or 'invidio' in site or 'youtu.be' in site:
+                await BOT.send_chat_action(
+                    chat_id=message.chat.id,
+                    action='record_video'
+                )
 
-            if value:
-                return [value.decode(), data], 'audio', key
-            else:
-                data = executor.submit(get_yt_video, link, data)
-                while data.done() is False:
-                    await asyncio.sleep(1)
-                return data.result(), 'video', key
+                if value:
+                    return [value.decode(), data], 'audio', key
+                else:
+                    data = executor.submit(get_yt_video, link, data)
+                    while data.done() is False:
+                        await asyncio.sleep(1)
+                    return data.result(), 'video', key
 
-        elif '4cdn.com' in link and 'webm' in link:
-            await BOT.send_chat_action(
-                chat_id=message.chat.id,
-                action='record_video'
-            )
+            elif '4cdn.com' in link and 'webm' in link:
+                await BOT.send_chat_action(
+                    chat_id=message.chat.id,
+                    action='record_video'
+                )
 
-            if value:
-                return [value.decode(), data], 'video', key
-            else:
-                data = executor.submit(get_yt_video, link, data)
-                while data.done() is False:
-                    await asyncio.sleep(1)
-                return data.result(), 'video', key
+                if value:
+                    return [value.decode(), data], 'video', key
+                else:
+                    data = executor.submit(get_yt_video, link, data)
+                    while data.done() is False:
+                        await asyncio.sleep(1)
+                    return data.result(), 'video', key
 
-        else:
+        except TypeError:
             await BOT.send_chat_action(
                 chat_id=message.chat.id,
                 action='record_video'
