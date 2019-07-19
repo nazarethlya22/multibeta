@@ -383,9 +383,9 @@ async def handler(bot: BOT, message: Message, link: str):
 
         if file_location:
             metadata = data[1]
-            thumbnail = os.path.splitext(file_location)[0] + '.jpg'
 
             try:
+                thumbnail = os.path.splitext(file_location)[0] + '.jpg'
                 if os.path.getsize(thumbnail) > 200 * 1024:
                     thumbnail = None
 
