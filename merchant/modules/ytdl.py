@@ -44,9 +44,8 @@ def get_data(url):
 
 async def link_handler(link, cmd, site, message: Message):
     data = get_data(link)
-    print(terrorist_characters.search(data['title']).groupdict())
     if terrorist_characters.search(data['title']) is not None & DISABLE_TERRORIST_CONTENT is True:
-        message.reply("Arabic content has been disabled by the bot")
+        await message.reply("Arabic content has been disabled by the bot")
     else:
         await BOT.send_chat_action(
             chat_id=message.chat.id,
